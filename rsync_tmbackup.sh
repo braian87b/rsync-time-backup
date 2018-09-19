@@ -234,6 +234,7 @@ while :; do
 		--differential)
 			shift
 			DIFFERENTIAL="1"
+			fn_log_info "--differential flag, will just save different files from previous backup..."
 			;;
 		--rsync-get-flags)
 			shift
@@ -247,6 +248,7 @@ while :; do
 		--strategy)
 			shift
 			EXPIRATION_STRATEGY="$1"
+			fn_log_info "custom --strategy specified: $1"
 			;;
 		--log-dir)
 			shift
@@ -519,7 +521,7 @@ while : ; do
 	fn_ln "$(basename -- "$DEST")" "$DEST_FOLDER/latest"
 
 	fn_rm_file "$INPROGRESS_FILE"
-	
+
 	# -----------------------------------------------------------------------------
 	# Remove duplicates from previous backup to have a differential backup
 	# -----------------------------------------------------------------------------
@@ -529,7 +531,15 @@ while : ; do
 		rmlint -gvkm "$PREVIOUS_DEST" // "$DEST"
 		./rmlint.sh -d
 		rm rmlint.json
+
+
+    #find . -type f -print0 | while read -d '' -r file; do
+        #echo "if [ `printf '%q' \"${file}\"` -ef `printf '../%q/%q' \"${CURRENT_DIR}\" \"${file}\"` ]; then rm -fv `printf './%q' \"${file}\"` ;fi";
+        #if [ `printf '%q' \"${file}\"` -ef `printf '../%q/%q' \"${CURRENT_DIR}\" \"${file}\"` ]; then rm -fv `printf './%q' \"${file}\"` ;fi;
+    #    eval "if [ `printf '%q' \"${file}\"` -ef `printf '../%q/%q' \"${CURRENT_DIR}\" \"${file}\"` ]; then rm -f `printf './%q' \"${file}\"` ;fi";
+    #done
 	fi
 
 	exit $EXIT_CODE
 done
+
