@@ -37,6 +37,8 @@ fn_display_usage() {
 	echo "Options"
 	echo " -p, --port           SSH port."
 	echo " -h, --help           Display this help message."
+	echo " --differential       It does a differential backup instead of incremental."
+	echo "                      It uses rmlint in order to cleanup links"
 	echo " --rsync-get-flags    Display the default rsync flags that are used for backup."
 	echo " --rsync-set-flags    Set the rsync flags that are going to be used for backup."
 	echo " --log-dir            Set the log file directory. If this flag is set, generated files will"
@@ -215,6 +217,7 @@ LOG_DIR="$HOME/.$APPNAME"
 AUTO_DELETE_LOG="1"
 EXPIRATION_STRATEGY="1:1 30:7 365:30"
 AUTO_EXPIRE="1"
+DIFFERENTIAL="0"
 
 RSYNC_FLAGS="-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --stats --human-readable"
 
@@ -227,6 +230,10 @@ while :; do
 		-p|--port)
 			shift
 			SSH_PORT=$1
+			;;
+		--differential)
+			shift
+			DIFFERENTIAL="1"
 			;;
 		--rsync-get-flags)
 			shift
@@ -512,6 +519,17 @@ while : ; do
 	fn_ln "$(basename -- "$DEST")" "$DEST_FOLDER/latest"
 
 	fn_rm_file "$INPROGRESS_FILE"
+	
+	# -----------------------------------------------------------------------------
+	# Remove duplicates from previous backup to have a differential backup
+	# -----------------------------------------------------------------------------
+	if [[ $DIFFERENTIAL == "1" ]]; then
+		rmlint -gvkm "$PREVIOUS_DEST" // "$DEST"
+		/root/rmlint.sh -d
+		rmlint -gvkm "$PREVIOUS_DEST" // "$DEST"
+		/root/rmlint.sh -d
+		rm rmlint.json
+	fi
 
 	exit $EXIT_CODE
 done
