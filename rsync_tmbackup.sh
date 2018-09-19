@@ -514,15 +514,6 @@ while : ; do
 	fi
 
 	# -----------------------------------------------------------------------------
-	# Add symlink to last backup
-	# -----------------------------------------------------------------------------
-
-	fn_rm_file "$DEST_FOLDER/latest"
-	fn_ln "$(basename -- "$DEST")" "$DEST_FOLDER/latest"
-
-	fn_rm_file "$INPROGRESS_FILE"
-
-	# -----------------------------------------------------------------------------
 	# Remove duplicates from previous backup to have a differential backup
 	# -----------------------------------------------------------------------------
 	if [[ $DIFFERENTIAL == "1" ]]; then
@@ -533,6 +524,15 @@ while : ; do
 		rm rmlint.json
 	fi
 
+	# -----------------------------------------------------------------------------
+	# Add symlink to last backup
+	# -----------------------------------------------------------------------------
+
+	fn_rm_file "$DEST_FOLDER/latest"
+	fn_ln "$(basename -- "$DEST")" "$DEST_FOLDER/latest"
+
+	fn_rm_file "$INPROGRESS_FILE"
+	
 	exit $EXIT_CODE
 done
 
