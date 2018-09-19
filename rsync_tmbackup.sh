@@ -525,9 +525,9 @@ while : ; do
 	# -----------------------------------------------------------------------------
 	if [[ $DIFFERENTIAL == "1" ]]; then
 		rmlint -gvkm "$PREVIOUS_DEST" // "$DEST"
-		/root/rmlint.sh -d
+		./rmlint.sh -d
 		rmlint -gvkm "$PREVIOUS_DEST" // "$DEST"
-		/root/rmlint.sh -d
+		./rmlint.sh -d
 		rm rmlint.json
 	fi
 
