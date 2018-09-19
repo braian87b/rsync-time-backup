@@ -531,13 +531,6 @@ while : ; do
 		rmlint -gvkm "$PREVIOUS_DEST" // "$DEST"
 		./rmlint.sh -d
 		rm rmlint.json
-
-
-    #find . -type f -print0 | while read -d '' -r file; do
-        #echo "if [ `printf '%q' \"${file}\"` -ef `printf '../%q/%q' \"${CURRENT_DIR}\" \"${file}\"` ]; then rm -fv `printf './%q' \"${file}\"` ;fi";
-        #if [ `printf '%q' \"${file}\"` -ef `printf '../%q/%q' \"${CURRENT_DIR}\" \"${file}\"` ]; then rm -fv `printf './%q' \"${file}\"` ;fi;
-    #    eval "if [ `printf '%q' \"${file}\"` -ef `printf '../%q/%q' \"${CURRENT_DIR}\" \"${file}\"` ]; then rm -f `printf './%q' \"${file}\"` ;fi";
-    #done
 	fi
 
 	exit $EXIT_CODE
